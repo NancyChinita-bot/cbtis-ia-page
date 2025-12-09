@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inteligencia Artificial - CBTIS 222</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #e3f2fd 0%, #fce4ec 50%, #e1bee7 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #4fc3f7 0%, #ec407a 100%);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .logo {
+            max-width: 180px;
+            height: auto;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+        
+        header h1 {
+            color: white;
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        header p {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 1.3em;
+            font-style: italic;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.85);
+            padding: 35px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #4fc3f7, #ec407a);
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card.full-width {
+            grid-column: 1 / -1;
+        }
+        
+        h2 {
+            color: #1976d2;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: 400;
+            border-bottom: 2px solid #ec407a;
+            padding-bottom: 12px;
+            display: inline-block;
+        }
+        
+        p {
+            line-height: 1.8;
+            color: #424242;
+            margin-bottom: 15px;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            padding: 10px 0 10px 30px;
+            position: relative;
+            color: #424242;
+            line-height: 1.6;
+        }
+        
+        li:before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            color: #ec407a;
+            font-size: 1.2em;
+        }
+        
+        .info-elegant {
+            background: linear-gradient(135deg, #bbdefb 0%, #f8bbd0 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border-left: 5px solid #1976d2;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+        }
+        
+        .info-elegant p {
+            margin: 8px 0;
+            color: #1a237e;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, #e1f5fe 0%, #fce4ec 100%);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            border-left: 4px solid #ec407a;
+            border: 2px solid rgba(236, 64, 122, 0.3);
+        }
+        
+        .stats-frame {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #e3f2fd 0%, #fce4ec 100%);
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            border: 3px solid rgba(79, 195, 247, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-box:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            color: #1976d2;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #ec407a;
+            font-weight: 600;
+            font-size: 0.95em;
+        }
+
+        .tech-frame {
+            background: linear-gradient(135deg, #bbdefb 0%, #f8bbd0 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid rgba(79, 195, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            border-color: #ec407a;
+            transform: translateY(-3px);
+        }
+
+        .testimonial-frame {
+            background: linear-gradient(135deg, #e1f5fe 0%, #fce4ec 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid rgba(236, 64, 122, 0.3);
+        }
+
+        .testimonial {
+            font-style: italic;
+            color: #1a237e;
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #4fc3f7;
+        }
+
+        .testimonial-author {
+            text-align: right;
+            color: #ec407a;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .requirements-frame {
+            background: linear-gradient(135deg, #bbdefb 0%, #f8bbd0 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .requirement-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 2px solid rgba(79, 195, 247, 0.3);
+        }
+
+        .requirement-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #4fc3f7, #ec407a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+
+        .schedule-frame {
+            background: linear-gradient(135deg, #e1f5fe 0%, #fce4ec 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border: 3px solid rgba(236, 64, 122, 0.3);
+        }
+
+        .schedule-table {
+            width: 100%;
+            margin-top: 15px;
+            border-collapse: collapse;
+        }
+
+        .schedule-table th {
+            background: linear-gradient(135deg, #4fc3f7, #ec407a);
+            color: white;
+            padding: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .schedule-table td {
+            background: white;
+            padding: 12px;
+            text-align: center;
+            border: 2px solid rgba(79, 195, 247, 0.3);
+        }
+        
+        footer {
+            background: linear-gradient(135deg, #42a5f5 0%, #d81b60 100%);
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        footer p {
+            color: white;
+            margin: 5px 0;
+            font-style: italic;
+        }
+        
+        strong {
+            color: #1976d2;
+            font-weight: 600;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #4fc3f7, #ec407a);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin: 20px 10px;
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="tu-logo.png" alt="Logo CBTIS 222" class="logo">
+            <h1>Inteligencia Artificial</h1>
+            <p>CBTIS 222 - Formando el Futuro</p>
+            <div style="margin-top: 20px;">
+                <a href="#lenguajes" class="cta-button">Lenguajes de Programación</a>
+                <a href="#hidalgo" class="cta-button">Oportunidades en Hidalgo</a>
+                <a href="#importancia" class="cta-button">¿Por Qué Estudiar IA?</a>
+            </div>
+        </header>
+
+        <!-- Estadísticas Destacadas -->
+        <div class="stats-frame">
+            <div class="stat-box">
+                <span class="stat-number">95%</span>
+                <span class="stat-label">Empleabilidad</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">100+</span>
+                <span class="stat-label">Empresas Aliadas</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-number">$25K+</span>
+                <span class="stat-label">Salario Promedio</span>
+            </div>
+        </div>
+        
+        <div class="content-grid">
+            <div class="card">
+                <h2>Sobre la Carrera</h2>
+                <p>La carrera de Inteligencia Artificial en el CBTIS 222 representa una oportunidad única para sumergirse en el mundo de la tecnología más avanzada.</p>
+                <p>Formamos profesionales técnicos capacitados para desarrollar, implementar y mantener sistemas inteligentes que están transformando cada aspecto de nuestra sociedad.</p>
+                <div class="info-elegant">
+                    <p><strong>Duración:</strong> 3 años (6 semestres)</p>
+                    <p><strong>Modalidad:</strong> Presencial</p>
+                    <p><strong>Turno:</strong> Matutino y Vespertino</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Plan de Estudios</h2>
+                <ul>
+                    <li>Fundamentos de programación</li>
+                    <li>Machine Learning avanzado</li>
+                    <li>Procesamiento de lenguaje natural</li>
+                    <li>Visión por computadora</li>
+                    <li>Desarrollo de chatbots</li>
+                    <li>Análisis de Big Data</li>
+                    <li>Redes neuronales</li>
+                    <li>Ética y responsabilidad en IA</li>
+                    <li>Deep Learning</li>
+                    <li>Robótica inteligente</li>
+                </ul>
+            </div>
+
+            <!-- Lenguajes de Programación -->
+            <div class="card full-width" id="lenguajes">
+                <h2>Lenguajes de Programación de la Carrera</h2>
+                <div class="tech-frame">
+                    <p style="color: #1a237e; margin-bottom: 20px;">Domina los lenguajes más demandados en la industria de Inteligencia Artificial:</p>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px;">
+                        <div style="background: white; padding: 20px; border-radius: 10px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                            <h3 style="color: #4fc3f7; margin-bottom: 10px;">🐍 Python</h3>
+                            <p style="font-size: 0.9em;">Lenguaje principal para IA y Machine Learning. Usado en el 90% de proyectos de ciencia de datos.</p>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; border: 3px solid rgba(236, 64, 122, 0.4);">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">☕ Java</h3>
+                            <p style="font-size: 0.9em;">Para aplicaciones empresariales robustas y sistemas de IA escalables en grandes corporaciones.</p>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                            <h3 style="color: #4fc3f7; margin-bottom: 10px;">📊 R</h3>
+                            <p style="font-size: 0.9em;">Especializado en análisis estadístico y visualización de datos complejos.</p>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; border: 3px solid rgba(236, 64, 122, 0.4);">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">🔷 C++</h3>
+                            <p style="font-size: 0.9em;">Para sistemas de alto rendimiento y algoritmos de IA que requieren velocidad extrema.</p>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                            <h3 style="color: #4fc3f7; margin-bottom: 10px;">💻 JavaScript</h3>
+                            <p style="font-size: 0.9em;">Para desarrollo web con IA, chatbots interactivos y aplicaciones en tiempo real.</p>
+                        </div>
+                        <div style="background: white; padding: 20px; border-radius: 10px; border: 3px solid rgba(236, 64, 122, 0.4);">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">🗄️ SQL</h3>
+                            <p style="font-size: 0.9em;">Manejo de bases de datos masivas, esencial para Big Data y Data Mining.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Oportunidades en Hidalgo -->
+            <div class="card full-width" id="hidalgo">
+                <h2>Oportunidades en el Estado de Hidalgo</h2>
+                <div class="testimonial-frame">
+                    <p style="color: #1a237e; font-size: 1.1em; margin-bottom: 20px;">Hidalgo se está consolidando como un polo tecnológico en México. Conoce las oportunidades que te esperan:</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+                        <div class="highlight">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">🏭 Industria Automotriz</h3>
+                            <p>Empresas como Volkswagen, Nissan y proveedores automotrices implementan IA para manufactura inteligente y control de calidad automatizado.</p>
+                        </div>
+                        
+                        <div class="highlight">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">🏢 Parques Tecnológicos</h3>
+                            <p>Ciudad del Conocimiento en Pachuca alberga startups tech y centros de innovación que buscan especialistas en IA.</p>
+                        </div>
+                        
+                        <div class="highlight">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">🏥 Sector Salud</h3>
+                            <p>Hospitales y clínicas implementan sistemas de diagnóstico asistido por IA y análisis de datos médicos.</p>
+                        </div>
+                        
+                        <div class="highlight">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">🎓 Instituciones Educativas</h3>
+                            <p>UAEH, ITESM Hidalgo y otras universidades buscan especialistas para investigación y docencia en IA.</p>
+                        </div>
+                        
+                        <div class="highlight">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">🏦 Servicios Financieros</h3>
+                            <p>Bancos y fintech en Pachuca requieren expertos en detección de fraudes y análisis predictivo.</p>
+                        </div>
+                        
+                        <div class="highlight">
+                            <h3 style="color: #ec407a; margin-bottom: 10px;">💼 Teletrabajo</h3>
+                            <p>Vive en Hidalgo y trabaja para empresas internacionales con salarios competitivos en dólares.</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 10px; margin-top: 20px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                        <p style="color: #1976d2; font-weight: 600; font-size: 1.1em;">📈 Crecimiento Proyectado: Se estima que el sector tecnológico en Hidalgo crecerá un 25% anual en los próximos 5 años, creando más de 5,000 empleos en IA y tecnologías relacionadas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Importancia de Estudiar IA -->
+            <div class="card full-width" id="importancia">
+                <h2>Importancia de Estudiar Inteligencia Artificial</h2>
+                <div class="requirements-frame">
+                    <p style="color: #1a237e; font-size: 1.1em; margin-bottom: 25px;">La Inteligencia Artificial no es solo una carrera más, es el futuro de la tecnología y la sociedad. Aquí te explicamos por qué es crucial estudiarla:</p>
+                    
+                    <div style="display: grid; gap: 20px;">
+                        <div style="background: white; padding: 25px; border-radius: 10px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                            <h3 style="color: #4fc3f7; margin-bottom: 15px;">🌍 Impacto Global</h3>
+                            <p>La IA está revolucionando todas las industrias: salud, educación, finanzas, entretenimiento, agricultura y más. Ser parte de esta transformación significa contribuir al progreso de la humanidad.</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 25px; border-radius: 10px; border: 3px solid rgba(236, 64, 122, 0.4);">
+                            <h3 style="color: #ec407a; margin-bottom: 15px;">💰 Alta Remuneración</h3>
+                            <p>Los profesionales en IA están entre los mejor pagados del sector tech. Salarios iniciales desde $25,000 MXN mensuales, llegando hasta $100,000+ MXN con experiencia.</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 25px; border-radius: 10px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                            <h3 style="color: #4fc3f7; margin-bottom: 15px;">🚀 Demanda Creciente</h3>
+                            <p>Se proyecta que para 2030, el 80% de las empresas utilizarán IA en sus operaciones. La demanda de especialistas supera ampliamente la oferta actual de profesionales capacitados.</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 25px; border-radius: 10px; border: 3px solid rgba(236, 64, 122, 0.4);">
+                            <h3 style="color: #ec407a; margin-bottom: 15px;">🎯 Versatilidad Profesional</h3>
+                            <p>Con conocimientos en IA puedes trabajar en cualquier sector: desde crear asistentes virtuales hasta desarrollar sistemas de conducción autónoma o diagnóstico médico.</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 25px; border-radius: 10px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                            <h3 style="color: #4fc3f7; margin-bottom: 15px;">🌐 Trabajo Global</h3>
+                            <p>La IA te permite trabajar desde cualquier lugar del mundo. Muchos egresados trabajan remoto para empresas en Estados Unidos, Europa y Asia sin salir de México.</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 25px; border-radius: 10px; border: 3px solid rgba(236, 64, 122, 0.4);">
+                            <h3 style="color: #ec407a; margin-bottom: 15px;">🧠 Desarrollo Intelectual</h3>
+                            <p>Estudiar IA desarrolla pensamiento analítico, resolución de problemas complejos y creatividad. Son habilidades que te servirán toda la vida.</p>
+                        </div>
+                        
+                        <div style="background: white; padding: 25px; border-radius: 10px; border: 3px solid rgba(79, 195, 247, 0.4);">
+                            <h3 style="color: #4fc3f7; margin-bottom: 15px;">📊 Futuro Garantizado</h3>
+                            <p>Mientras otras carreras pueden ser automatizadas, los desarrolladores de IA son quienes crean esa automatización. Tu trabajo no será reemplazado, serás tú quien transforme el mercado laboral.</p>
+                        </div>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #4fc3f7, #ec407a); padding: 25px; border-radius: 10px; margin-top: 25px; color: white; text-align: center;">
+                        <h3 style="font-size: 1.5em; margin-bottom: 10px;">💡 El momento es AHORA</h3>
+                        <p style="font-size: 1.1em; color: white;">No esperes a que el futuro llegue, sé parte de quienes lo están construyendo. La revolución de la IA ya comenzó y necesita profesionales como tú.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Estudiar en CBTIS 222</h2>
+                <div class="highlight">
+                    <p><strong>Instalaciones de primer nivel</strong></p>
+                </div>
+                <ul>
+                    <li>Laboratorios con tecnología de punta</li>
+                    <li>Docentes especializados certificados</li>
+                    <li>Convenios con empresas líderes</li>
+                    <li>Proyectos reales desde el inicio</li>
+                    <li>Participación en competencias</li>
+                    <li>Biblioteca especializada</li>
+                    <li>Acceso a plataformas cloud</li>
+                    <li>Eventos y conferencias con expertos</li>
+                </ul>
+            </div>
+            
+            <div class="card">
+                <h2>Ventajas Profesionales</h2>
+                <div class="highlight">
+                    <p><strong>Alta demanda laboral:</strong> La IA es el sector con mayor crecimiento en tecnología</p>
+                </div>
+                <div class="highlight">
+                    <p><strong>Salarios competitivos:</strong> Profesionales bien remunerados desde el inicio</p>
+                </div>
+                <div class="highlight">
+                    <p><strong>Trabajo remoto:</strong> Oportunidades en empresas internacionales</p>
+                </div>
+                <div class="highlight">
+                    <p><strong>Innovación constante:</strong> Siempre a la vanguardia tecnológica</p>
+                </div>
+                <div class="highlight">
+                    <p><strong>Desarrollo continuo:</strong> Campo en constante evolución y aprendizaje</p>
+                </div>
+            </div>
+
+            <!-- Horarios -->
+            <div class="card full-width">
+                <h2>Horarios Disponibles</h2>
+                <div class="schedule-frame">
+                    <table class="schedule-table">
+                        <tr>
+                            <th>Turno</th>
+                            <th>Horario</th>
+                            <th>Días</th>
+                            <th>Disponibilidad</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Matutino</strong></td>
+                            <td>7:00 AM - 2:00 PM</td>
+                            <td>Lunes a Viernes</td>
+                            <td style="color: #4caf50; font-weight: bold;">Disponible</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Vespertino</strong></td>
+                            <td>2:00 PM - 9:00 PM</td>
+                            <td>Lunes a Viernes</td>
+                            <td style="color: #4caf50; font-weight: bold;">Disponible</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="card full-width">
+                <h2>Campo Laboral</h2>
+                <p>Nuestros egresados tienen acceso a un amplio espectro de oportunidades profesionales en diversos sectores de la industria tecnológica y más allá.</p>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 20px;">
+                    <div>
+                        <ul>
+                            <li>Empresas de desarrollo de software</li>
+                            <li>Consultorías tecnológicas</li>
+                            <li>Startups innovadoras</li>
+                            <li>Sector financiero y bancario</li>
+                            <li>Empresas de telecomunicaciones</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>Industria automotriz</li>
+                            <li>Sector salud y diagnóstico</li>
+                            <li>E-commerce y marketing digital</li>
+                            <li>Desarrollo independiente</li>
+                            <li>Instituciones educativas</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="card full-width">
+                <h2>Proyectos y Certificaciones</h2>
+                <p>Durante tu formación, tendrás la oportunidad de desarrollar proyectos significativos y obtener certificaciones reconocidas en la industria.</p>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; margin-top: 20px;">
+                    <div>
+                        <h3 style="color: #ec407a; margin-bottom: 15px;">Proyectos Destacados</h3>
+                        <ul>
+                            <li>Chatbots inteligentes conversacionales</li>
+                            <li>Sistemas de reconocimiento facial</li>
+                            <li>Análisis predictivo de datos</li>
+                            <li>Aplicaciones con asistentes virtuales</li>
+                            <li>Modelos de detección de fraudes</li>
+                            <li>Sistemas de recomendación</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 style="color: #ec407a; margin-bottom: 15px;">Certificaciones</h3>
+                        <ul>
+                            <li>Python para Data Science</li>
+                            <li>Machine Learning Fundamentals</li>
+                            <li>Cloud Computing (AWS/Azure)</li>
+                            <li>Desarrollo con IA</li>
+                            <li>Deep Learning Specialization</li>
+                            <li>TensorFlow Developer</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer id="contacto">
+            <p><strong>CBTIS 222 - Carrera de Inteligencia Artificial</strong></p>
+            <p>Transformando el presente, construyendo el futuro</p>
+        </footer>
+    </div>
+</body>
+</html>
